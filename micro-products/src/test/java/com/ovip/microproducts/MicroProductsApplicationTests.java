@@ -49,15 +49,15 @@ class MicroProductsApplicationTests {
         dynamicPropertyRegistry.add("spring.data.mongodb.uri",mongoDBContainer::getReplicaSetUrl);
     }
 
-//    @Test
-//    void shouldGetAllProducts() throws Exception{
-//        List<ProductResponse> productResponses = getAllProducts();
-//        String productResponseString =objectMapper.writeValueAsString(productResponses);
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(productResponseString)
-//        ).andExpect(status().isOk());
-//    }
+    @Test
+    void shouldGetAllProducts() throws Exception{
+        List<ProductResponse> productResponses = getAllProducts();
+        String productResponseString =objectMapper.writeValueAsString(productResponses);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/product")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(productResponseString)
+        ).andExpect(status().isOk());
+    }
 
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
