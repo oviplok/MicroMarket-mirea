@@ -25,7 +25,7 @@ public class MicroInventoryApplication {
 
 			Inventory inventory1 = new Inventory();
 			inventory1.setSkuCode("Chebupeli");
-			inventory1.setQuantity(0);
+			inventory1.setQuantity(700);
 
 			inventoryRepository.save(inventory);
 			inventoryRepository.save(inventory1);
