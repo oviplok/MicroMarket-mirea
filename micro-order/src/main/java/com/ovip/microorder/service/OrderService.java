@@ -42,25 +42,21 @@ public class OrderService {
                 .toList();
 
         //Call Inventory, and place order if product is in stock
-        //1:57:30
-        InventoryResponse[] inventoryResponsesArray=webClientBuilder.build().get()
-                .uri("http://localhost:8082/api/inventory"
-                        ,uriBuilder -> uriBuilder.queryParam("skuCode",skuCodes).build())
+        InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
+                .uri("http://micro-inventory/api/inventory",
+                        uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                 .retrieve()
-                        .bodyToMono(InventoryResponse[].class)
-                                .block();
+                .bodyToMono(InventoryResponse[].class)
+                .block();
 
-       boolean allProductsInStock = Arrays
-               .stream(inventoryResponsesArray)
-               .allMatch(InventoryResponse::isInStock);
+        boolean allProductsInStock = Arrays.stream(inventoryResponseArray)
+                .allMatch(InventoryResponse::isInStock);
 
         if(allProductsInStock){
             orderRepository.save(order);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Product is not in stock, please try again later");
         }
-
     }
 
     private OrderLineItems mapToDto(OrderLineItemsDto orderLineItemsDto) {

@@ -20,6 +20,7 @@
         <module>micro-inventory</module>
         <module>micro-order</module>
         <module>discovery-server</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
