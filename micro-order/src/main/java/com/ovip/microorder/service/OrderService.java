@@ -4,7 +4,6 @@ package com.ovip.microorder.service;
 import com.ovip.microorder.event.OrderPlacedEvent;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
-import com.ovip.microorder.config.WebClientConfig;
 import com.ovip.microorder.dto.InventoryResponse;
 import com.ovip.microorder.dto.OrderLineItemsDto;
 import com.ovip.microorder.dto.OrderRequest;
@@ -12,7 +11,6 @@ import com.ovip.microorder.model.Order;
 import com.ovip.microorder.model.OrderLineItems;
 import org.springframework.context.ApplicationEventPublisher;
 import com.ovip.microorder.repository.OrderRepository;
-import io.micrometer.tracing.Tracer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,9 +29,10 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final WebClient.Builder webClientBuilder;
-    private final ObservationRegistry observationRegistry;
-    private final ApplicationEventPublisher applicationEventPublisher;
-    //private final Tracer
+    private final ObservationRegistry observationRegistry;    //private final Tracer
+    private final ApplicationEventPublisher applicationEventPublisher;//private final KafkaTemplate
+
+
 
     public String placeOrder(OrderRequest orderRequest){
         Order order = new Order();
@@ -69,6 +68,7 @@ public class OrderService {
             if (allProductsInStock) {
                 orderRepository.save(order);
                 // publish Order Placed Event
+                // Не работает почему-то D:
                 applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderNumber()));
                 return "Order Placed";
             } else {
