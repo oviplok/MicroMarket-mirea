@@ -1,13 +1,12 @@
-package com.ovip.microorder;
+package com.ovip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroOrderApplicationTests {
+class NotificationServiceApplicationTest {
 
     @Test
     void contextLoads() {
     }
-
 }
