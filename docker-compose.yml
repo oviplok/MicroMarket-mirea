@@ -109,7 +109,7 @@ services:
   discovery-server:
     image: hahehm/discovery-server:latest
     container_name: discovery-server
-#    pull_policy: always
+    pull_policy: always
     ports:
       - "8761:8761"
     environment:
@@ -120,7 +120,7 @@ services:
   api-gateway:
     image: hahehm/api-gateway:latest
     container_name: api-gateway
-#    pull_policy: always
+    pull_policy: always
     ports:
       - "8181:8080"
     expose:
@@ -137,7 +137,7 @@ services:
   micro-product:
     container_name: product-service
     image: hahehm/micro-products:latest
-#    pull_policy: always
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -149,7 +149,7 @@ services:
   micro-order:
     container_name: order-service
     image: hahehm/micro-order:latest
-#    pull_policy: always
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
@@ -164,10 +164,10 @@ services:
   micro-inventory:
     container_name: inventory-service
     image: hahehm/micro-inventory:latest
-#    pull_policy: always
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/micro-inventory
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inv_service
     depends_on:
       - postgres-inventory
       - discovery-server
@@ -177,7 +177,7 @@ services:
   notification-service:
     container_name: notification-service
     image: hahehm/notification-service:latest
-#    pull_policy: always
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
