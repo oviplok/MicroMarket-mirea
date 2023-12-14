@@ -1,6 +1,7 @@
 package com.microproducts.microproducts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ovip.microproducts.MicroProductsApplication;
 import com.ovip.microproducts.dto.ProductRequest;
 import com.ovip.microproducts.dto.ProductResponse;
 import com.ovip.microproducts.model.Product;
@@ -26,8 +27,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@Testcontainers
+@SpringBootTest(classes = {MicroProductsApplication.class, ProductRepository.class, org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper.class})
 @AutoConfigureMockMvc
 class MicroProductsApplicationTests {
 
@@ -35,12 +35,15 @@ class MicroProductsApplicationTests {
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private ProductRepository productRepository;
+
+//    static {
+//        mongoDBContainer.start();
+//    }
+
 
     @DynamicPropertySource
     @ResponseStatus(HttpStatus.CREATED)
@@ -73,16 +76,13 @@ class MicroProductsApplicationTests {
 
     @Test
     void shouldCreateProduct() throws Exception {
-        ProductRequest productRequest= getProductRequest();
-        String productRequestString =objectMapper.writeValueAsString(productRequest);
-
+        ProductRequest productRequest = getProductRequest();
+        String productRequestString = objectMapper.writeValueAsString(productRequest);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/product")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(productRequestString)
-        ).andExpect(status().isCreated());
-
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productRequestString))
+                .andExpect(status().isCreated());
         Assertions.assertEquals(1, productRepository.findAll().size());
-
     }
 
     private ProductRequest getProductRequest() {

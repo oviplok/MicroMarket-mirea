@@ -1,0 +1,25 @@
+# /.github/workflows/ci-cd.yml
+
+name: CI/CD pipline
+
+on:
+  push:
+    branches: [ "master", "dockerization" ]
+  pull_request:
+    branches: [ "master", "dockerization" ]
+  workflow_dispatch:
+    jobs:
+      build-and-push-to-dh:
+        name: Build and push to DockerHub
+        runs-on: ubuntu-latest
+        needs: [ test ]
+        steps:
+          - uses: actions/checkout@v3
+
+          - name: Build docker image
+            run: |
+              mvn clean compile jib:build
+          - name: Test solution
+            run: |
+              echo There will be tests later
+

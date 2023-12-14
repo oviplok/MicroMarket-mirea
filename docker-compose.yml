@@ -1,35 +1,61 @@
 version: '3.7'
 services:
   ## MySQL Docker Compose Config
-  postgres-order:
-    container_name: postgres-order
-    image: postgres
+#  postgres-order:
+#    container_name: postgres-order
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: micro-order
+#      POSTGRES_USER: user0110
+#      POSTGRES_PASSWORD: Ne903
+#      PGDATA: /data/postgres
+#    volumes:
+#      - ./postgres-order:/data/postgres
+#    expose:
+#      - "5431"
+#    ports:
+#      - "5431:5431"
+#    command: -p 5431
+#    restart: unless-stopped
+  mysql-order:
+    container_name: mysql-order
+    image: mysql:5.7
     environment:
-      POSTGRES_DB: micro-order
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: Ne903
-      PGDATA: /data/postgres
+      MYSQL_DATABASE: micro-order
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user0110
+      MYSQL_PASSWORD: Ne903
     volumes:
-      - ./postgres-order:/data/postgres
-    expose:
-      - "5431"
+      - ./mysql-order:/var/lib/mysql
     ports:
-      - "5431:5431"
-    command: -p 5431
+      - "3308:3306"
     restart: unless-stopped
 
-  postgres-inventory:
-    container_name: postgres-inventory
-    image: postgres
+#  postgres-inventory:
+#    container_name: postgres-inventory
+#    image: postgres
+#    environment:
+#      POSTGRES_DB: micro-inventory
+#      POSTGRES_USER: user0110
+#      POSTGRES_PASSWORD: Ne903
+#      PGDATA: /data/postgres
+#    volumes:
+#      - ./postgres-inventory:/data/postgres
+#    ports:
+#      - "5432:5432"
+#    restart: unless-stopped
+  mysql-inventory:
+    container_name: mysql-inventory
+    image: mysql:5.7
     environment:
-      POSTGRES_DB: micro-inventory
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: Ne903
-      PGDATA: /data/postgres
+      MYSQL_DATABASE: micro-inventory
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user0110
+      MYSQL_PASSWORD: Ne903
     volumes:
-      - ./postgres-inventory:/data/postgres
+      - ./mysql-inventory:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3307:3306"
     restart: unless-stopped
 
   ## Mongo Docker Compose Config
@@ -152,9 +178,11 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3306/micro-order
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
     depends_on:
-      - postgres-order
+      - mysql-order
       - broker
       - zipkin
       - discovery-server
@@ -167,9 +195,11 @@ services:
     pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inv_service
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3306/micro-inventory
+#      - SPRING_PROFILES_ACTIVE=docker
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inv_service
     depends_on:
-      - postgres-inventory
+      - mysql-inventory
       - discovery-server
       - api-gateway
 
