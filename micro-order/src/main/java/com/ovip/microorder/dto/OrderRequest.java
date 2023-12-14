@@ -1,6 +1,5 @@
 package com.ovip.microorder.dto;
 
-import com.ovip.microorder.model.OrderLineItems;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

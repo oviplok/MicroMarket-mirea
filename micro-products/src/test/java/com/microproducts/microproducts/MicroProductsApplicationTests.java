@@ -1,6 +1,5 @@
-package com.ovip.microproducts;
+package com.microproducts.microproducts;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ovip.microproducts.dto.ProductRequest;
 import com.ovip.microproducts.dto.ProductResponse;

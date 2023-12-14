@@ -1,9 +1,9 @@
 package com.ovip.microproducts.controller;
 
 
+import com.ovip.microproducts.service.ProductService;
 import com.ovip.microproducts.dto.ProductRequest;
 import com.ovip.microproducts.dto.ProductResponse;
-import com.ovip.microproducts.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
-public class ProducrController {
+public class ProductController {
 
     private final ProductService productService;
 
