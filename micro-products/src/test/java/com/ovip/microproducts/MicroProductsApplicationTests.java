@@ -1,4 +1,4 @@
-package com.microproducts.microproducts;
+package com.ovip.microproducts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ovip.microproducts.dto.ProductRequest;
@@ -31,8 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class MicroProductsApplicationTests {
 
-    @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
+    @Container //В случае ошибки чекнуть /.docker
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");;
+
     @Autowired
     private MockMvc mockMvc;
 
