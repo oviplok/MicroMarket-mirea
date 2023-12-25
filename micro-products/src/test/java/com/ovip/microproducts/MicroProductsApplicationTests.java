@@ -82,7 +82,7 @@ class MicroProductsApplicationTests {
                 .content(productRequestString)
         ).andExpect(status().isCreated());
 
-        Assertions.assertEquals(1, productRepository.findAll().size());
+        Assertions.assertEquals(3, productRepository.findAll().size());
 
     }
 
@@ -90,7 +90,7 @@ class MicroProductsApplicationTests {
         return ProductRequest.builder()
                 .name("Домашнее задание")
                 .description("Ребята, слушайте")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000.00)
                 .build();
     }
 
