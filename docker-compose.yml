@@ -29,9 +29,9 @@ services:
     volumes:
       - ./mysql-order:/var/lib/mysql
     expose:
-      - "3307"
+      - "3306"
     ports:
-      - "3307:3307"
+      - "3306:3306"
 #    command: -p 3307
     restart: always
 
@@ -58,8 +58,8 @@ services:
       MYSQL_PASSWORD: Ne903
     volumes:
       - ./mysql-inventory:/var/lib/mysql
-    expose:
-      - "3308"
+#    expose:
+#      - "3308"
     ports:
       - "3308:3308"
 #    command: -p 3308
@@ -137,6 +137,10 @@ services:
     container_name: zipkin
     ports:
       - "9411:9411"
+    environment:
+      - STORAGE_TYPE=mem
+#      - ES_HOSTS=http://localhost:8181
+
 
   ## Eureka Server
   discovery-server:
@@ -189,7 +193,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - spring.profiles.active=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3307/micro-order
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3306/micro-order
     #      - SPRING_PROFILES_ACTIVE=docker
     #      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
     depends_on:

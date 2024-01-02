@@ -83,7 +83,6 @@ class MicroProductsApplicationTests {
         ).andExpect(status().isCreated());
 
         Assertions.assertEquals(3, productRepository.findAll().size());
-
     }
 
     private ProductRequest getProductRequest() {
