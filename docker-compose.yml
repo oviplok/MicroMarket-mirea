@@ -1,75 +1,77 @@
 version: '3.7'
 # ПРОВЕРИТЬ ПРОФИЛИ ВСЯЧЕСКИ МБ ИЗ-ЗА НИХ ВСЕ СТУКАЕТСЯ А ТАКЖЕ БИЛДИТЬ ДЖАРЫ
 services:
-  ## MySQL Docker Compose Config
-  #  postgres-order:
-  #    container_name: postgres-order
-  #    image: postgres
-  #    environment:
-  #      POSTGRES_DB: micro-order
-  #      POSTGRES_USER: user0110
-  #      POSTGRES_PASSWORD: Ne903
-  #      PGDATA: /data/postgres
-  #    volumes:
-  #      - ./postgres-order:/data/postgres
-  #    expose:
-  #      - "5431"
-  #    ports:
-  #      - "5431:5431"
-  #    command: -p 5431
-  #    restart: unless-stopped
-  mysql-order:
-    container_name: mysql-order
-    image: mysql:5.7
+  # MySQL Docker Compose Config
+  postgres-order:
+    container_name: postgres-order
+    image: postgres
     environment:
-      MYSQL_DATABASE: micro-order
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: user0110
-      MYSQL_PASSWORD: Ne903
+      POSTGRES_DB: micro-order
+      POSTGRES_USER: heheh
+      POSTGRES_PASSWORD: Ne903
+#      PGDATA: /data/postgres
     volumes:
-      - ./mysql-order:/var/lib/mysql
+      - ./postgres-order:/data/postgres
     expose:
-      - "3306"
+      - "5431"
     ports:
-      - "3306:3306"
-#    command: -p 3307
-    restart: always
+      - "5431:5431"
+    command: -p 5431
+    restart: unless-stopped
 
-  #  postgres-inventory:
-  #    container_name: postgres-inventory
-  #    image: postgres
-  #    environment:
-  #      POSTGRES_DB: micro-inventory
-  #      POSTGRES_USER: user0110
-  #      POSTGRES_PASSWORD: Ne903
-  #      PGDATA: /data/postgres
-  #    volumes:
-  #      - ./postgres-inventory:/data/postgres
-  #    ports:
-  #      - "5432:5432"
-  #    restart: unless-stopped
-  mysql-inventory:
-    container_name: mysql-inventory
-    image: mysql:5.7
-    environment:
-      MYSQL_DATABASE: micro-inventory
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: user0110
-      MYSQL_PASSWORD: Ne903
-    volumes:
-      - ./mysql-inventory:/var/lib/mysql
+#  mysql-order:
+#    container_name: mysql-order
+#    image: mysql:5.7
+#    environment:
+#      MYSQL_DATABASE: micro-order
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_USER: user0110
+#      MYSQL_PASSWORD: Ne903
+#    volumes:
+#      - ./mysql-order:/var/lib/mysql
 #    expose:
-#      - "3308"
+#      - "3307"
+#    ports:
+#      - "3307:3306"
+#    command: -p 3307
+#    restart: always
+
+  postgres-inventory:
+    container_name: postgres-inventory
+    image: postgres
+    environment:
+      POSTGRES_DB: micro-inventory
+      POSTGRES_USER: heheh
+      POSTGRES_PASSWORD: Ne903
+#      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-inventory:/data/postgres
     ports:
-      - "3308:3308"
-#    command: -p 3308
-    restart: always
+      - "5432:5432"
+    restart: unless-stopped
+
+#  mysql-inventory:
+#    container_name: mysql-inventory
+#    image: mysql:5.7
+#    environment:
+#      MYSQL_DATABASE: micro-inventory
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_USER: user0110
+#      MYSQL_PASSWORD: Ne903
+#    volumes:
+#      - ./mysql-inventory:/var/lib/mysql
+##    expose:
+##      - "3308"
+#    ports:
+#      - "3308:3306"
+##    command: -p 3308
+##    restart: always
 
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
     image: mongo:4.4.14-rc0-focal
-    restart: always
+#    restart: always
     ports:
       - "27017:27017"
     expose:
@@ -193,11 +195,15 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - spring.profiles.active=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3306/micro-order
+#      - spring.datasource.url=jdbc:mysql://mysql-order:3307/micro-order?createDatabaseIfNotExist=true
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3307/micro-order?createDatabaseIfNotExist=true
+#       jdbc:mysql://127.0.0.1:3306/ord_service?createDatabaseIfNotExist=true
+#       jdbc:mysql://mysql-order:3306/micro-order
     #      - SPRING_PROFILES_ACTIVE=docker
-    #      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
     depends_on:
-      - mysql-order
+      - postgres-order
+#      - mysql-order
       - broker
       - zipkin
       - discovery-server
@@ -211,11 +217,13 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - spring.profiles.active=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3308/micro-inventory
-    #      - SPRING_PROFILES_ACTIVE=docker
-    #      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/inv_service
+#      - spring.datasource.url=jdbc:mysql://mysql-inventory:3308/micro-inventory?createDatabaseIfNotExist=true
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3308/micro-inventory?createDatabaseIfNotExist=true
+    # jdbc:mysql://mysql-inventory:3308/micro-inventory
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/micro-inventory
     depends_on:
-      - mysql-inventory
+      - postgres-inventory
+#      - mysql-inventory
       - discovery-server
       - api-gateway
 
@@ -237,7 +245,7 @@ services:
   prometheus:
     image: prom/prometheus:v2.37.1
     container_name: prometheus
-    restart: always
+#    restart: always
     ports:
       - "9090:9090"
     volumes:
@@ -245,13 +253,13 @@ services:
     depends_on:
       - micro-product
       - micro-inventory
-      - micro-order
+#      - micro-order
       - notification-service
 
   grafana:
     image: grafana/grafana-oss:8.5.2
     container_name: grafana
-    restart: always
+#    restart: always
     ports:
       - "3000:3000"
     links:
