@@ -15,8 +15,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 @RequiredArgsConstructor
 public class NotificationServiceApplication {
 
-//    private final ObservationRegistry observationRegistry;
-//    private final Tracer tracer;
+    private final ObservationRegistry observationRegistry;
+    private final Tracer tracer;
 
     public static void main(String[] args) {
         SpringApplication.run(NotificationServiceApplication.class, args);
@@ -24,12 +24,35 @@ public class NotificationServiceApplication {
 
     @KafkaListener(topics = "notificationTopic")
     public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
-//        Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
-//            log.info("Got message <{}>", orderPlacedEvent);
-//            log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
-//                    orderPlacedEvent.getOrderNumber());
-//        });
-
+        Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
+            log.info("Got message <{}>", orderPlacedEvent);
+            log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
+                    orderPlacedEvent.getOrderNumber());
+        });
         log.info("Received Notification for Order - {}", orderPlacedEvent.getOrderNumber());
     }
 }
+
+//@SpringBootApplication
+//@Slf4j
+//@RequiredArgsConstructor
+//public class NotificationServiceApplication {
+//
+////    private final ObservationRegistry observationRegistry;
+////    private final Tracer tracer;
+//
+//    public static void main(String[] args) {
+//        SpringApplication.run(NotificationServiceApplication.class, args);
+//    }
+//
+//    @KafkaListener(topics = "notificationTopic")
+//    public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
+////        Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
+////            log.info("Got message <{}>", orderPlacedEvent);
+////            log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
+////                    orderPlacedEvent.getOrderNumber());
+////        });
+//
+//        log.info("Received Notification for Order - {}", orderPlacedEvent.getOrderNumber());
+//    }
+//}

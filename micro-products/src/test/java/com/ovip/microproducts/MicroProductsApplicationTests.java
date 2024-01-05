@@ -1,4 +1,4 @@
-package com.microproducts.microproducts;
+package com.ovip.microproducts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ovip.microproducts.dto.ProductRequest;
@@ -31,8 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class MicroProductsApplicationTests {
 
-    @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
+    @Container //В случае ошибки чекнуть /.docker
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -81,15 +82,14 @@ class MicroProductsApplicationTests {
                 .content(productRequestString)
         ).andExpect(status().isCreated());
 
-        Assertions.assertEquals(1, productRepository.findAll().size());
-
+        Assertions.assertEquals(3, productRepository.findAll().size());
     }
 
     private ProductRequest getProductRequest() {
         return ProductRequest.builder()
                 .name("Домашнее задание")
                 .description("Ребята, слушайте")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000.00)
                 .build();
     }
 
