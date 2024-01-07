@@ -29,12 +29,19 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
       - name: Build and Push Docker Image
-        run: |
-          mvn clean compile jib:build -Djib.to.image=micro-products-workflow -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$DOCKER_PASSWORD -pl micro-products
-        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REGISTRY_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        uses: MathieuSoysal/jib-container-publish.yml@v2.1.4
+        with:
+          # Use docker.io for Docker Hub if empty
+          REGISTRY: docker.io
+          # github.repository as <your-account>/<your-repo>
+          IMAGE_NAME: oviplok/MicroMarket-mirea/micro-products
+          # Tag name of the image to publish
+          tag-name: test
+          # Username to login to registry
+          USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          # Password to login to registry
+          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          java-version: 17
 
 #  deploy:
 #    needs: [build]
