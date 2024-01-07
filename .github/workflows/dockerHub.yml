@@ -30,12 +30,12 @@ jobs:
           distribution: 'adopt'
       - name: Build and Push Docker Image
         run: |
-          mvn clean compile jib:build -Djib.to.image=micro-products-workflow -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$DOCKERHUB_TOKEN -pl micro-products
+          mvn clean compile jib:build -Djib.to.image=micro-products-workflow -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$NEW_TOKEN -pl micro-products
        
         env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REGISTRY_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+          REGISTRY_PASSWORD: ${{ secrets.NEW_TOKEN }}
 
 #  deploy:
 #    needs: [build]
