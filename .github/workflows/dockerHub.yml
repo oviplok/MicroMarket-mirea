@@ -38,9 +38,9 @@ jobs:
           # Tag name of the image to publish
           tag-name: test
           # Username to login to registry
-          USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          USERNAME: hahehm
           # Password to login to registry
-          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          PASSWORD: GitPassword
           java-version: 17
 
 #  deploy:
