@@ -40,7 +40,7 @@ jobs:
           # Username to login to registry
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           # Password to login to registry
-          PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
           java-version: 17
 
 #  deploy:
