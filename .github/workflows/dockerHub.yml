@@ -28,16 +28,24 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      # - name: Build docker image
-      #   working-directory: ./micro-products
-      #   run: docker buildx build . —file Dockerfile —tag ${{ secrets.DOCKER_USERNAME }}/product-service:test
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
+      - name: Build and Push Docker Image
+        uses: MathieuSoysal/jib-container-publish.yml@v2.1.4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Push
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/product-service:test
+          # Use docker.io for Docker Hub if empty
+          # REGISTRY:
+          # github.repository as <your-account>/<your-repo>
+          IMAGE_NAME: oviplok/MicroMarket-mirea/micro-products
+          # Tag name of the image to publish
+          tag-name: test
+          # Username to login to registry
+          USERNAME: ${{ DOCKER_USERNAME }}
+          # Password to login to registry
+          PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+          java-version: 17
+        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REGISTRY_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
 
 #  deploy:
 #    needs: [build]
