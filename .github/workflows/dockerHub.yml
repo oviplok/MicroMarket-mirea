@@ -33,7 +33,7 @@ jobs:
       #   run: mvn clean compile package
       - name: Build docker image
         working-directory: 'micro-products'
-        run: docker build . —file Dockerfile —tag ${{ secrets.DOCKER_USERNAME }}/micro-products-workflow:test
+        run: docker build -f Dockerfile -t hahehm/micro-products-workflow:test .
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
