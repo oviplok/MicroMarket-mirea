@@ -28,9 +28,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-      - name: Build docker image
-        working-directory: ./micro-products
-        run: docker buildx build . —file Dockerfile —tag ${{ secrets.DOCKER_USERNAME }}/product-service:test
+      # - name: Build docker image
+      #   working-directory: ./micro-products
+      #   run: docker buildx build . —file Dockerfile —tag ${{ secrets.DOCKER_USERNAME }}/product-service:test
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
