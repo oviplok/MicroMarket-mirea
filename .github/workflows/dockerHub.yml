@@ -30,7 +30,7 @@ jobs:
           distribution: 'adopt'
       - name: Build docker image
         working-directory: ./micro-products
-        run: docker build . —file Dockerfile —tag ${{ secrets.DOCKER_USERNAME }}/product-service:test
+        run: docker buildx build . —file Dockerfile —tag ${{ secrets.DOCKER_USERNAME }}/product-service:test
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
