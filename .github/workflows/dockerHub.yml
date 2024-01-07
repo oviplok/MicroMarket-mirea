@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'jdk'
       - name: Build with Maven
         run: mvn clean package
 
@@ -26,6 +27,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'jdk'
       - name: Build and Push Docker Image
         run: |
           mvn clean compile jib:build -Djib.to.image=micro-products-workflow -Djib.to.auth.username=$DOCKER_USERNAME -Djib.to.auth.password=$DOCKER_PASSWORD -pl micro-products
