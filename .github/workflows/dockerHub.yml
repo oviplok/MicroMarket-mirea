@@ -27,6 +27,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: adapt
       - name: Build with Maven
         run: mvn clean compile package
       - name: Build docker image
