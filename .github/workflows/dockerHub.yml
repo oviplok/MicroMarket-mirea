@@ -38,7 +38,7 @@ jobs:
           # Tag name of the image to publish
           tag-name: test
           # Username to login to registry
-          USERNAME: ${{ DOCKER_USERNAME }}
+          USERNAME: ${{ secrets.DOCKER_USERNAME }}
           # Password to login to registry
           PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
           java-version: 17
