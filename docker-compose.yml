@@ -1,7 +1,6 @@
 version: '3.7'
-# ПРОВЕРИТЬ ПРОФИЛИ ВСЯЧЕСКИ МБ ИЗ-ЗА НИХ ВСЕ СТУКАЕТСЯ А ТАКЖЕ БИЛДИТЬ ДЖАРЫ
 services:
-  # MySQL Docker Compose Config
+  # PostgreSQL Docker Compose Config
   postgres-order:
     container_name: postgres-order
     image: postgres
@@ -9,7 +8,6 @@ services:
       POSTGRES_DB: micro-order
       POSTGRES_USER: heheh
       POSTGRES_PASSWORD: Ne903
-#      PGDATA: /data/postgres
     volumes:
       - ./postgres-order:/data/postgres
     expose:
@@ -19,23 +17,6 @@ services:
     command: -p 5431
     restart: unless-stopped
 
-#  mysql-order:
-#    container_name: mysql-order
-#    image: mysql:5.7
-#    environment:
-#      MYSQL_DATABASE: micro-order
-#      MYSQL_ROOT_PASSWORD: root
-#      MYSQL_USER: user0110
-#      MYSQL_PASSWORD: Ne903
-#    volumes:
-#      - ./mysql-order:/var/lib/mysql
-#    expose:
-#      - "3307"
-#    ports:
-#      - "3307:3306"
-#    command: -p 3307
-#    restart: always
-
   postgres-inventory:
     container_name: postgres-inventory
     image: postgres
@@ -43,35 +24,16 @@ services:
       POSTGRES_DB: micro-inventory
       POSTGRES_USER: heheh
       POSTGRES_PASSWORD: Ne903
-#      PGDATA: /data/postgres
     volumes:
       - ./postgres-inventory:/data/postgres
     ports:
       - "5432:5432"
     restart: unless-stopped
 
-#  mysql-inventory:
-#    container_name: mysql-inventory
-#    image: mysql:5.7
-#    environment:
-#      MYSQL_DATABASE: micro-inventory
-#      MYSQL_ROOT_PASSWORD: root
-#      MYSQL_USER: user0110
-#      MYSQL_PASSWORD: Ne903
-#    volumes:
-#      - ./mysql-inventory:/var/lib/mysql
-##    expose:
-##      - "3308"
-#    ports:
-#      - "3308:3306"
-##    command: -p 3308
-##    restart: always
-
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
     image: mongo:4.4.14-rc0-focal
-#    restart: always
     ports:
       - "27017:27017"
     expose:
@@ -141,8 +103,6 @@ services:
       - "9411:9411"
     environment:
       - STORAGE_TYPE=mem
-#      - ES_HOSTS=http://localhost:8181
-
 
   ## Eureka Server
   discovery-server:
@@ -195,15 +155,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - spring.profiles.active=docker
-#      - spring.datasource.url=jdbc:mysql://mysql-order:3307/micro-order?createDatabaseIfNotExist=true
-#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-order:3307/micro-order?createDatabaseIfNotExist=true
-#       jdbc:mysql://127.0.0.1:3306/ord_service?createDatabaseIfNotExist=true
-#       jdbc:mysql://mysql-order:3306/micro-order
-    #      - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/micro-order
     depends_on:
       - postgres-order
-#      - mysql-order
       - broker
       - zipkin
       - discovery-server
@@ -217,13 +171,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - spring.profiles.active=docker
-#      - spring.datasource.url=jdbc:mysql://mysql-inventory:3308/micro-inventory?createDatabaseIfNotExist=true
-#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-inventory:3308/micro-inventory?createDatabaseIfNotExist=true
-    # jdbc:mysql://mysql-inventory:3308/micro-inventory
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-inventory:5432/micro-inventory
     depends_on:
       - postgres-inventory
-#      - mysql-inventory
       - discovery-server
       - api-gateway
 
@@ -245,7 +195,6 @@ services:
   prometheus:
     image: prom/prometheus:v2.37.1
     container_name: prometheus
-#    restart: always
     ports:
       - "9090:9090"
     volumes:
@@ -253,13 +202,12 @@ services:
     depends_on:
       - micro-product
       - micro-inventory
-#      - micro-order
+      - micro-order
       - notification-service
 
   grafana:
     image: grafana/grafana-oss:8.5.2
     container_name: grafana
-#    restart: always
     ports:
       - "3000:3000"
     links:
@@ -269,38 +217,3 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=password
-
-
-
-
-
-
-
-
-
-
-
-#  zookeeper:
-#    image: confluentinc/cp-zookeeper:7.0.1
-#    container_name: zookeeper
-#    ports:
-#      - "2181:2181"
-#    environment:
-#      ZOOKEEPER_CLIENT_PORT: 2181
-#      ZOOKEEPER_TICK_TIME: 2000
-#
-#  broker:
-#    image: confluentinc/cp-kafka:7.0.1
-#    container_name: broker
-#    ports:
-#      - "9092:9092"
-#    depends_on:
-#      - zookeeper
-#    environment:
-#      KAFKA_BROKER_ID: 1
-#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-#      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
